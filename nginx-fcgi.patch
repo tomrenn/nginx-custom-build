@@ -1,0 +1,49 @@
+--- a/nginx.spec
++++ b/nginx.spec
+@@ -1,9 +1,8 @@
+-#
+ %define nginx_home %{_localstatedir}/cache/nginx
+ %define nginx_user nginx
+ %define nginx_group nginx
+ 
+-Summary: High performance web server
++Summary: nginx is a high performance web server (Built with XSLT, XSLT HTML Parser, and Auth Request modules)
+ Name: nginx
+ Version: 1.4.5
+ Release: 1%{?dist}.ngx
+@@ -18,6 +17,8 @@
+ Source5: nginx.vh.default.conf
+ Source6: nginx.vh.example_ssl.conf
+ Source7: nginx.suse.init
++Source8: ngx_http_auth_request_module
++Source9: headers-more-nginx-module-0.25
+ 
+ License: 2-clause BSD-like license
+ %if 0%{?suse_version}
+@@ -54,6 +55,8 @@
+ 
+ %prep
+ %setup -q
++cp -R -p %SOURCE8 .
++cp -R -p %SOURCE9 . 
+ 
+ %build
+ ./configure \
+@@ -89,6 +92,8 @@
+         --with-ipv6 \
+         --with-debug \
+         --with-cc-opt="%{optflags} $(pcre-config --cflags)" \
++        --add-module=%{_builddir}/%{name}-%{version}/headers-more-nginx-module-0.25 \
++        --add-module=%{_builddir}/%{name}-%{version}/ngx_http_auth_request_module \
+         $*
+ make %{?_smp_mflags}
+ %{__mv} %{_builddir}/%{name}-%{version}/objs/nginx \
+@@ -125,6 +130,8 @@
+         --with-file-aio \
+         --with-ipv6 \
+         --with-cc-opt="%{optflags} $(pcre-config --cflags)" \
++        --add-module=%{_builddir}/%{name}-%{version}/headers-more-nginx-module-0.25 \
++        --add-module=%{_builddir}/%{name}-%{version}/ngx_http_auth_request_module \
+         $*
+ make %{?_smp_mflags}
+ 

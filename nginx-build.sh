@@ -30,10 +30,8 @@ popd
 #Get various add-on modules for Nginx
 pushd ~/rpmbuild/SOURCES
 hg clone https://bitbucket.org/davidjb/ngx_http_auth_request_module
-wget https://github.com/agentzh/headers-more-nginx-module/archive/v0.19.tar.gz -O headers-more-nginx-module-0.19.tar.gz
-tar xvf headers-more-nginx-module-0.19.tar.gz
-git clone https://github.com/aperezdc/ngx-fancyindex.git
-git clone https://github.com/yaoweibin/nginx_ajp_module.git
+wget https://github.com/agentzh/headers-more-nginx-module/archive/v0.25.tar.gz -O headers-more-nginx-module-0.25.tar.gz
+tar xvf headers-more-nginx-module-0.25.tar.gz
 popd
 
 #Prep and patch the Nginx specfile for the RPMs
@@ -41,10 +39,9 @@ popd
 #      or located at /vagrant 
 pushd ~/rpmbuild/SPECS
 if [ -d "/vagrant" ]; then
-    cp /vagrant/nginx-eresearch.patch ~/rpmbuild/SPECS/
-    cp /vagrant/nginx-xslt-html-parser.patch ~/rpmbuild/SOURCES/
+    cp /vagrant/nginx-fcgi.patch ~/rpmbuild/SPECS/
 fi
-patch -p1 < nginx-eresearch.patch
+patch -p1 < nginx-fcgi.patch
 spectool -g -R nginx.spec
 rpmbuild -ba nginx.spec
 

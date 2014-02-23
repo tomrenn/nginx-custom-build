@@ -7,7 +7,8 @@ Vagrant.configure("2") do |config|
   config.vm.box_url = "http://puppet-vagrant-boxes.puppetlabs.com/centos-64-x64-vbox4210.box"
 
   #config.vm.network :forwarded_port, guest: 80, host: 80
-  config.vm.network :public_network
+  config.vm.network "public_network", :bridge => 'en0: Wi-Fi (AirPort)'
+  #config.vm.network :public_network
 
   #Build the custom version of Nginx 
   config.vm.provision :shell, :path => "sync-shared-folder.sh"
